@@ -1,8 +1,6 @@
 import { DecodeResult, EncodeResult, PartialSession, Session } from "./types";
-// import { Context } from "hono";
-// import { Environment } from "hono/dist/types";
-// import { Schema } from "hono/dist/validator/schema";
 import { decodeJwt, jwtVerify, SignJWT } from "jose";
+import { crypto, CryptoKey } from "@cloudflare/workers-types";
 
 // extend JWTClaimVerificationOptions to include csrf token
 declare module "jose" {
