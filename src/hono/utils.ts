@@ -1,10 +1,10 @@
 import { Context } from 'hono';
 import { Environment } from "hono/dist/types";
 import { Schema } from 'hono/dist/validator/schema';
+import { StatusCode } from 'hono/utils/http-status';
 import { decodeJwt } from 'jose';
 import { decodeSession } from '../jwt';
 import { PartialSession } from '../types';
-
 
 export const getIssuer = (c: Context<string, Environment>) => {
     const issuer = c.env.ISSUER;
@@ -52,7 +52,7 @@ export const jwtMiddleware = async (c: Context<string, Environment, Schema>, nex
 
     if (!jwt || !csrt) {
         // Not authorized
-        return new Response('Not authorized', { status: 401 });
+        return c.text('Not authorized', 401);
     }
 
     // get orign of request
@@ -63,8 +63,7 @@ export const jwtMiddleware = async (c: Context<string, Environment, Schema>, nex
 
 
     if (!audience) {
-
-        return new Response('Not Authorized', { status: 400 });
+        return c.text('Not authorized', 401);
     }
 
     // decode jwt
@@ -76,11 +75,11 @@ export const jwtMiddleware = async (c: Context<string, Environment, Schema>, nex
     )
 
     if (!decoded.valid || !decoded.session || decoded.session.csrt !== csrt) {
-        return new Response('Not authorized', { status: 401 });
+        return c.text('Not authorized', 401);
     }
 
     if (decoded.expired) {
-        return new Response('Session expired', { status: 440 });
+        return c.text('Session expired', 440 as StatusCode);
     }
 
 
