@@ -1,6 +1,6 @@
 import { Context } from 'hono';
 import { Environment } from "hono/dist/types";
-import { Schema } from "hono/dist/validator/schema";
+import { Schema } from 'hono/dist/validator/schema';
 import { decodeJwt } from 'jose';
 import { decodeSession } from '../jwt';
 import { PartialSession } from '../types';
@@ -20,7 +20,7 @@ export const getAudience = (c: Context<string, Environment>) => {
     return c.req.headers.get('Host');
 }
 
-export const getSessionPartial = async (c: Context<string, Environment, Schema>): Promise<PartialSession | undefined> => {
+export const getSessionPartial = async (c: Context<string, Environment, unknown>): Promise<PartialSession | undefined> => {
     const cookies = c.req.headers.get('Cookie')?.split(';');
     const jwt = cookies?.find(c => c.trim().startsWith('jwt='))?.split('=')[1];
 
