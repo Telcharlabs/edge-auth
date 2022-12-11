@@ -1,13 +1,6 @@
-export interface User {
-    userId: string
-    username: string
-    password: string
-    salt: string
-}
-
 export interface Session {
     sessionId: string
-    userId: string
+    sub: string // id of user / subject
     issued: number
     expires: number
     csrt: string

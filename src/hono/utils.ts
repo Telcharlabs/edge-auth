@@ -35,7 +35,7 @@ export const getSessionPartial = async (c: Context<string, Environment, unknown>
     }
 
     return {
-        userId: session.sub,
+        sub: session.sub,
         sessionId: session.jti
     }
 }
@@ -75,19 +75,13 @@ export const jwtMiddleware = async (c: Context<string, Environment, Schema>, nex
         audience
     )
 
-    console.log('decoded', decoded);
-
     if (!decoded.valid || !decoded.session || decoded.session.csrt !== csrt) {
         return new Response('Not authorized', { status: 401 });
     }
 
-    console.log('here')
-
     if (decoded.expired) {
         return new Response('Session expired', { status: 440 });
     }
-
-    console.log('here')
 
 
     return await next()

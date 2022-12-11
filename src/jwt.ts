@@ -17,7 +17,7 @@ export const encodeSession = async (secretKey: CryptoKey | Uint8Array, partialSe
     const csrt = crypto.randomUUID();
 
     const encodedToken = await new SignJWT({
-        sub: partialSession.userId,
+        sub: partialSession.sub,
         jti: partialSession.sessionId,
         csrt
     })
@@ -53,7 +53,7 @@ export const decodeSession = async (secretKey: CryptoKey | Uint8Array, token: st
         });
 
         const session: Partial<Session> = {
-            userId: decoded.payload.sub,
+            sub: decoded.payload.sub,
             sessionId: decoded.payload.jti,
             issued: decoded.payload.iat,
             expires: decoded.payload.exp,
